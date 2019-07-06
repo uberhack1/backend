@@ -1,2 +1,4 @@
 **/*.Dotsettings.user
 **/.idea
+**/bin
+**/obj
