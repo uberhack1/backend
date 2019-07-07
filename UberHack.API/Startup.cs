@@ -49,6 +49,7 @@ namespace UberHack.API
             services.AddTransient<IBaseRepository<Faculdade>, BaseRepository<Faculdade>>();
             services.AddTransient<IBaseRepository<Mensagem>, BaseRepository<Mensagem>>();
             services.AddTransient<IBaseRepository<Usuario>, BaseRepository<Usuario>>();
+            services.AddTransient<IBaseRepository<ChatUsuarios>, BaseRepository<ChatUsuarios>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

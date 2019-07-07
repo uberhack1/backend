@@ -8,28 +8,33 @@ using UberHack.API.Model;
 
 namespace UberHack.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class WorkNetController : ControllerBase
     {
         readonly IBaseRepository<Usuario> _usuarioRepository;
         readonly IBaseRepository<Mensagem> _mensagemRepository;
         readonly IBaseRepository<Chat> _chatRepository;
+        readonly IBaseRepository<ChatUsuarios> _chatUsuariosRepository;
 
         public WorkNetController(
             IBaseRepository<Usuario> usuarioRepository,
             IBaseRepository<Mensagem> mensagemRepository,
-            IBaseRepository<Chat> chatRepository)
+            IBaseRepository<Chat> chatRepository,
+            IBaseRepository<ChatUsuarios> chatUsuariosRepository)
         {
             _usuarioRepository = usuarioRepository;
             _mensagemRepository = mensagemRepository;
             _chatRepository = chatRepository;
+            _chatUsuariosRepository = chatUsuariosRepository;
         }
 
         [HttpPost]
-        public void IniciarChat(int usuarioId, int usuarioConexaoId)
+        public void IniciarChatPrivado(int usuarioId, int usuarioConexaoId)
         {
-            var chat = _chatRepository.Insert(new Chat() {  });
+            var chat = _chatRepository.Insert(new Chat() { TipoChat = TipoChat.privado });
+            _chatUsuariosRepository.Insert(new ChatUsuarios() { ChatId = chat.Id, UsuarioId = usuarioId });
+            _chatUsuariosRepository.Insert(new ChatUsuarios() { ChatId = chat.Id, UsuarioId = usuarioConexaoId });
         }
 
         [HttpPost]

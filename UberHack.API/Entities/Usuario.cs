@@ -14,7 +14,7 @@ namespace UberHack.API.Entities
         public string Cpf { get; set; }
         public int EmpresaId { get; set; }
         public int BairroCasaId { get; set; }
-        public int FaculdadeId { get; set; }
+        public int? FaculdadeId { get; set; }
         public string Bio { get; set; }
         public string Foto { get; set; }
     }

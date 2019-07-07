@@ -12,6 +12,7 @@ namespace UberHack.API.Repository.Configuration
             builder.HasKey(b => b.Id);
 
             builder.Property(o => o.Nome);
+            builder.Property(o => o.TipoChat);
 
             builder.HasMany(o => o.Mensagens);
             builder.HasMany(o => o.ChatUsuarios);
