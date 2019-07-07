@@ -58,24 +58,22 @@ namespace UberHack.API.Controllers
             .Include(o => o.Faculdade)
             .Include(o => o.BairroCasa)
             .Include(o => o.ChatUsuarios)
-            .Where(o => o.Id == codigoUsuario)
-            .First();
+            .First(o => o.Id == codigoUsuario);
 
-            var UsuarioModel = new UsuarioModel(usuario);
+            var usuarioModel = new UsuarioModel(usuario);
 
             var chatsDoUsuario = usuario.ChatUsuarios.Select(c => c.Id);
-            UsuarioModel.Chats = _chatRepository.GetQueryable()
+            usuarioModel.Chats = _chatRepository.GetQueryable()
                 .Where(o => chatsDoUsuario.Contains(o.Id))
                 .Include(o => o.Mensagens)
-                .OrderByDescending(o => o.Mensagens.OrderByDescending(m => m.DataHora))
                 .ToList();
 
-            foreach (var chat in UsuarioModel.Chats)
-                chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
+            foreach (var chat in usuarioModel.Chats)
+                chat.Mensagens = chat.Mensagens.OrderBy(o => xo.DataHora);
 
-            UsuarioModel.PossiveisConexoes = ObterPossiveisConexoes(usuario);
+            usuarioModel.PossiveisConexoes = ObterPossiveisConexoes(usuario);
 
-            return UsuarioModel;
+            return usuarioModel;
         }
 
         [HttpGet]
@@ -83,12 +81,8 @@ namespace UberHack.API.Controllers
         {
             var chat = _chatRepository.GetQueryable()
             .Include(o => o.ChatUsuarios)
-            //.Include(o => o.ChatUsuarios.Select(u => u.Usuario))
             .Include(o=> o.Mensagens)
-            .Where(o => o.Id == codigoChat).First();
-
-            foreach (var chatUsuario in chat.ChatUsuarios)
-                chatUsuario.Usuario = _usuarioRepository.GetQueryable().Where(o => o.Id == chatUsuario.UsuarioId).First();
+            .First(o => o.Id == codigoChat);
 
             chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
             return chat;

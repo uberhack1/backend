@@ -15,7 +15,6 @@ namespace UberHack.API.Repository.Configuration
             builder.Property(o => o.DataHora);
 
             builder.HasOne(o => o.Usuario);
-            builder.HasOne(o => o.Chat);
         }
     }
 }
