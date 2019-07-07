@@ -5,9 +5,14 @@ namespace UberHack.API.Hub
 {
     public class ChatHub : Microsoft.AspNetCore.SignalR.Hub
     {
-        public Task SendMessage(string user, string message)
+        public Task SendMessage(ChatMessage message)
         {
-            return Clients.All.SendAsync("ReceiveMessage", user, message);
+            return Clients.Group(message.ChatId).SendAsync("ReceiveMessage", message.Content);
+        }
+
+        public Task Join(string groupId)
+        {
+            Groups.AddToGroupAsync(Context.ConnectionId, groupId);
         }
     }
 }
