@@ -15,7 +15,6 @@ namespace UberHack.API.Controllers
         readonly IBaseRepository<Usuario> _usuarioRepository;
         readonly IBaseRepository<Mensagem> _mensagemRepository;
 
-
         public WorkNetController(
             IBaseRepository<Usuario> usuarioRepository,
             IBaseRepository<Mensagem> mensagemRepository)
@@ -54,7 +53,7 @@ namespace UberHack.API.Controllers
 
         private IEnumerable<PossivelConexaoModel> ObterPossiveisConexoes(int usuarioId)
         {
-            Usuario usuarioLogado = ObterUsuarioLogado();
+            Usuario usuarioLogado = _usuarioRepository.Get(usuarioId));
 
             IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
                 .Where(o => o.FaculdadeId == usuarioLogado.FaculdadeId
@@ -62,11 +61,6 @@ namespace UberHack.API.Controllers
                 && o.Id != usuarioId);
 
             return possiveisConexoes.Select(o => new PossivelConexaoModel(o));
-        }
-
-        private Usuario ObterUsuarioLogado()
-        {
-            return _usuarioRepository.Get(_codigoUsuarioLogado);
         }
     }
 }
