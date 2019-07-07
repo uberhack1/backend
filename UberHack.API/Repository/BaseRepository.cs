@@ -11,9 +11,9 @@ namespace UberHack.API.Repository
     public class BaseRepository<TEntity> : IBaseRepository<TEntity>
             where TEntity : Entidade
     {
-        protected readonly DbContext _context;
+        readonly UberHackDbContext _context;
 
-        protected BaseRepository(DbContext context)
+        public BaseRepository(UberHackDbContext context)
         {
             _context = context;
         }
