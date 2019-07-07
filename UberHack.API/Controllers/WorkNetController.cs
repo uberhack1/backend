@@ -78,6 +78,22 @@ namespace UberHack.API.Controllers
             return UsuarioModel;
         }
 
+        [HttpGet]
+        public Chat ObterChat(int codigoChat)
+        {
+            var chat = _chatRepository.GetQueryable()
+            .Include(o => o.ChatUsuarios)
+            //.Include(o => o.ChatUsuarios.Select(u => u.Usuario))
+            .Include(o=> o.Mensagens)
+            .Where(o => o.Id == codigoChat).First();
+
+            foreach (var chatUsuario in chat.ChatUsuarios)
+                chatUsuario.Usuario = _usuarioRepository.GetQueryable().Where(o => o.Id == chatUsuario.UsuarioId).First();
+
+            chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
+            return chat;
+        }
+
         private IEnumerable<PossivelConexaoModel> ObterPossiveisConexoes(Usuario usuario)
         {
             IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
