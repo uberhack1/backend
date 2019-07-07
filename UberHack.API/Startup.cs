@@ -16,6 +16,7 @@ using UberHack.API.Contracts;
 using UberHack.API.Entities;
 using UberHack.API.Repository;
 using Swashbuckle.AspNetCore.Swagger;
+using UberHack.API.Hub;
 
 namespace UberHack.API
 {
@@ -39,6 +40,7 @@ namespace UberHack.API
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddSignalR();
 
             services.AddTransient<IBaseRepository<Funcionario>, BaseRepository<Funcionario>>();
         }
@@ -60,6 +62,10 @@ namespace UberHack.API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json",
                     "API UberHack1");
+            });
+            app.UseSignalR(route =>
+            {
+                route.MapHub<ChatHub>("/chathub");
             });
 
             app.UseHttpsRedirection();
