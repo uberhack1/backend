@@ -8,7 +8,7 @@ using UberHack.API.Model;
 
 namespace UberHack.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class WorkNetController : ControllerBase
     {
