@@ -6,7 +6,7 @@ namespace UberHack.API.Repository
 {
     public class UberHackDbContext : DbContext
     {
-        public DbSet<Funcionario> Funcionario { get; set; }
+        public DbSet<Usuario> Funcionario { get; set; }
 
         public UberHackDbContext(DbContextOptions<UberHackDbContext> options) : base(options)
         {
@@ -14,7 +14,7 @@ namespace UberHack.API.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(FuncionarioConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UsuarioConfiguration).Assembly);
         }
     }
 

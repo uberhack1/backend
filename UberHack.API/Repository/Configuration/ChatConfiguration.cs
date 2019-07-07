@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UberHack.API.Entities;
 
 namespace UberHack.API.Repository.Configuration
 {
-    public class FuncionarioConfiguration : IEntityTypeConfiguration<Funcionario>
+    public class ChatConfiguration : IEntityTypeConfiguration<Chat>
     {
-        public void Configure(EntityTypeBuilder<Funcionario> builder)
+        public void Configure(EntityTypeBuilder<Chat> builder)
         {
             builder.HasKey(b => b.Id);
+
+            builder.Property(o => o.Nome);
+
+            builder.HasMany(o => o.Mensagens);
         }
     }
-
 }

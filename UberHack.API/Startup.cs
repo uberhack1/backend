@@ -40,7 +40,12 @@ namespace UberHack.API
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddTransient<IBaseRepository<Funcionario>, BaseRepository<Funcionario>>();
+            services.AddTransient<IBaseRepository<Bairro>, BaseRepository<Bairro>>();
+            services.AddTransient<IBaseRepository<Chat>, BaseRepository<Chat>>();
+            services.AddTransient<IBaseRepository<Empresa>, BaseRepository<Empresa>>();
+            services.AddTransient<IBaseRepository<Faculdade>, BaseRepository<Faculdade>>();
+            services.AddTransient<IBaseRepository<Mensagem>, BaseRepository<Mensagem>>();
+            services.AddTransient<IBaseRepository<Usuario>, BaseRepository<Usuario>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
