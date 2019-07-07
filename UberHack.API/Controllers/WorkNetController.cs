@@ -38,7 +38,7 @@ namespace UberHack.API.Controllers
             _chatUsuariosRepository.Insert(new ChatUsuarios() { ChatId = chat.Id, UsuarioId = usuarioConexaoId });
         }
 
-        [HttpPost]
+        [HttpGet]
         public void EnviarMensagem(int usuarioId, int chatId, string conteudo)
         {
             _mensagemRepository.Insert(new Mensagem()
