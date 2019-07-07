@@ -69,7 +69,7 @@ namespace UberHack.API.Controllers
                 .ToList();
 
             foreach (var chat in usuarioModel.Chats)
-                chat.Mensagens = chat.Mensagens.OrderBy(o => xo.DataHora);
+                chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
 
             usuarioModel.PossiveisConexoes = ObterPossiveisConexoes(usuario);
 
