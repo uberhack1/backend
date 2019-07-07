@@ -58,17 +58,17 @@ namespace UberHack.API.Controllers
             .Include(o => o.Faculdade)
             .Include(o => o.BairroCasa)
             .Include(o => o.ChatUsuarios)
-            .ThenInclude(a => a.Select(o => o.Usuario))
-            .Include(o => o.ChatUsuarios)
-            .ThenInclude(a => a.Select(o => o.Chat))
             .Where(o => o.Id == codigoUsuario)
             .First();
 
             var UsuarioModel = new UsuarioModel(usuario);
 
-            UsuarioModel.Chats = usuario.ChatUsuarios
-                .Select(o => o.Chat)
-                .OrderByDescending(o => o.Mensagens.OrderByDescending(m => m.DataHora));
+            var chatsDoUsuario = usuario.ChatUsuarios.Select(c => c.Id);
+            UsuarioModel.Chats = _chatRepository.GetQueryable()
+                .Where(o => chatsDoUsuario.Contains(o.Id))
+                .Include(o => o.Mensagens)
+                .OrderByDescending(o => o.Mensagens.OrderByDescending(m => m.DataHora))
+                .ToList();
 
             foreach (var chat in UsuarioModel.Chats)
                 chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
