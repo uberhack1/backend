@@ -4,7 +4,7 @@ namespace UberHack.API.Entities
 {
     public class Usuario : Entidade
     {
-        public IEnumerable<Chat> Chats { get; set; }
+        public IEnumerable<ChatUsuarios> ChatUsuarios { get; set; }
         public Empresa Empresa { get; set; }
         public Bairro BairroCasa { get; set; }
         public Faculdade Faculdade { get; set; }

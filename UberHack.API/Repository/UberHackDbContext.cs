@@ -6,7 +6,13 @@ namespace UberHack.API.Repository
 {
     public class UberHackDbContext : DbContext
     {
-        public DbSet<Usuario> Funcionario { get; set; }
+        public DbSet<Bairro> Bairro { get; set; }
+        public DbSet<Chat> Chat { get; set; }
+        public DbSet<ChatUsuarios> ChatUsuarios { get; set; }
+        public DbSet<Empresa> Empresa { get; set; }
+        public DbSet<Faculdade> Faculdade { get; set; }
+        public DbSet<Mensagem> Mensagem { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
 
         public UberHackDbContext(DbContextOptions<UberHackDbContext> options) : base(options)
         {

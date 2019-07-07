@@ -14,13 +14,22 @@ namespace UberHack.API.Controllers
     {
         readonly IBaseRepository<Usuario> _usuarioRepository;
         readonly IBaseRepository<Mensagem> _mensagemRepository;
+        readonly IBaseRepository<Chat> _chatRepository;
 
         public WorkNetController(
             IBaseRepository<Usuario> usuarioRepository,
-            IBaseRepository<Mensagem> mensagemRepository)
+            IBaseRepository<Mensagem> mensagemRepository,
+            IBaseRepository<Chat> chatRepository)
         {
             _usuarioRepository = usuarioRepository;
             _mensagemRepository = mensagemRepository;
+            _chatRepository = chatRepository;
+        }
+
+        [HttpPost]
+        public void IniciarChat(int usuarioId, int usuarioConexaoId)
+        {
+            var chat = _chatRepository.Insert(new Chat() {  });
         }
 
         [HttpPost]
@@ -42,8 +51,11 @@ namespace UberHack.API.Controllers
 
             var UsuarioModel = new UsuarioModel(usuario);
 
-            usuario.Chats = usuario.Chats.OrderByDescending(o => o.Mensagens.OrderByDescending(m => m.DataHora));
-            foreach (var chat in usuario.Chats)
+            UsuarioModel.Chats = usuario.ChatUsuarios
+                .Select(o => o.Chat)
+                .OrderByDescending(o => o.Mensagens.OrderByDescending(m => m.DataHora));
+
+            foreach (var chat in UsuarioModel.Chats)
                 chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
 
             UsuarioModel.PossiveisConexoes = ObterPossiveisConexoes(codigoUsuario);
@@ -53,7 +65,7 @@ namespace UberHack.API.Controllers
 
         private IEnumerable<PossivelConexaoModel> ObterPossiveisConexoes(int usuarioId)
         {
-            Usuario usuarioLogado = _usuarioRepository.Get(usuarioId));
+            Usuario usuarioLogado = _usuarioRepository.Get(usuarioId);
 
             IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
                 .Where(o => o.FaculdadeId == usuarioLogado.FaculdadeId

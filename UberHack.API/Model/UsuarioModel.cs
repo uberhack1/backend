@@ -9,6 +9,8 @@ namespace UberHack.API.Model
     public class UsuarioModel
     {
         public Usuario Usuario { get; set; }
+        public IEnumerable<Chat> Chats { get; set; }
+
         public IEnumerable<PossivelConexaoModel> PossiveisConexoes { get; set; }
 
         public UsuarioModel(IEnumerable<PossivelConexaoModel> possiveisConexoes)

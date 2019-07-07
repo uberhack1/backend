@@ -25,7 +25,7 @@ namespace UberHack.API.Repository.Configuration
             builder.HasOne(o => o.Empresa);
             builder.HasOne(o => o.Faculdade);
 
-            builder.HasMany(o => o.Chats);
+            builder.HasMany(o => o.ChatUsuarios);
         }
     }
 }
