@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UberHack.API.Contracts;
@@ -11,18 +12,28 @@ namespace UberHack.API.Controllers
     [ApiController]
     public class WorkNetController : ControllerBase
     {
-        // Mock persona Bianca
-        private readonly int _codigoUsuarioLogado = 1;
+        readonly IBaseRepository<Usuario> _usuarioRepository;
+        readonly IBaseRepository<Mensagem> _mensagemRepository;
 
-        IBaseRepository<Usuario> _usuarioRepository;
-        readonly IBaseRepository<Chat> _chatRepository;
 
         public WorkNetController(
             IBaseRepository<Usuario> usuarioRepository,
-            IBaseRepository<Chat> chatRepository)
+            IBaseRepository<Mensagem> mensagemRepository)
         {
             _usuarioRepository = usuarioRepository;
-            _chatRepository = chatRepository;
+            _mensagemRepository = mensagemRepository;
+        }
+
+        [HttpPost]
+        public void EnviarMensagem(int usuarioId, int chatId, string conteudo)
+        {
+            _mensagemRepository.Insert(new Mensagem()
+            {
+                ChatId = chatId,
+                DataHora = DateTime.Now,
+                Conteudo = conteudo,
+                UsuarioId = usuarioId
+            });
         }
 
         [HttpGet]
@@ -46,7 +57,7 @@ namespace UberHack.API.Controllers
             Usuario usuarioLogado = ObterUsuarioLogado();
 
             IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
-                .Where(o => o.FaculdadeId == usuarioLogado.FaculdadeId 
+                .Where(o => o.FaculdadeId == usuarioLogado.FaculdadeId
                 || o.EmpresaId == usuarioLogado.EmpresaId
                 && o.Id != usuarioId);
 
