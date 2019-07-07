@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UberHack.API.Entities;
 
 namespace UberHack.API.Contracts
 {
-    public interface IBaseRepository<TEntity> where TEntity : class
+    public interface IBaseRepository<TEntity> where TEntity : Entidade
     {
-        Task<IEnumerable<TEntity>> GetAllAsync();
-        Task<TEntity> UpdateAsync(TEntity entity);
+        TEntity Get(int Id);
+        IEnumerable<TEntity> GetAll();
         TEntity Update(TEntity entity);
-        Task<TEntity> InsertAsync(TEntity entity);
         TEntity Insert(TEntity entity);
         int InsertRange(IEnumerable<TEntity> entities);
         void Delete(TEntity entity);

@@ -9,7 +9,7 @@ using UberHack.API.Entities;
 namespace UberHack.API.Repository
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity>
-            where TEntity : class
+            where TEntity : Entidade
     {
         protected readonly DbContext _context;
 
@@ -18,27 +18,24 @@ namespace UberHack.API.Repository
             _context = context;
         }
 
+        public TEntity Get(int Id)
+        {
+            return GetQueryable().Where(o => o.Id == Id).FirstOrDefault();
+        }
+
         public void Delete(TEntity entity)
         {
             _context.Remove(entity);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public IEnumerable<TEntity> GetAll()
         {
-            return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
+            return _context.Set<TEntity>().AsNoTracking().ToList();
         }
 
         public IQueryable<TEntity> GetQueryable()
         {
             return _context.Set<TEntity>().AsNoTracking();
-        }
-
-        public async Task<TEntity> InsertAsync(TEntity entity)
-        {
-            await _context.Set<TEntity>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-
-            return entity;
         }
 
         public TEntity Insert(TEntity entity)
@@ -53,16 +50,6 @@ namespace UberHack.API.Repository
         {
             _context.Set<TEntity>().AddRange(entities);
             return _context.SaveChanges();
-        }
-
-        public async Task<TEntity> UpdateAsync(TEntity entity)
-        {
-            var entry = _context.Update<TEntity>(entity);
-
-            await _context.SaveChangesAsync();
-            entry.State = EntityState.Detached;
-
-            return entity;
         }
 
         public TEntity Update(TEntity entity)
