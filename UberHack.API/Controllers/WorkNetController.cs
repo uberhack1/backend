@@ -81,10 +81,18 @@ namespace UberHack.API.Controllers
         {
             var chat = _chatRepository.GetQueryable()
             .Include(o => o.ChatUsuarios)
-            .Include(o=> o.Mensagens)
+            .Include(o => o.Mensagens)
             .First(o => o.Id == codigoChat);
 
+            var usuarios = _usuarioRepository.GetQueryable().Where(u => chat.ChatUsuarios.Any(c => c.UsuarioId == u.Id)).ToList();
+            
             chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
+
+            foreach (var item in chat.Mensagens)
+            {
+                item.Usuario = usuarios.FirstOrDefault(u => u.Id == item.UsuarioId);
+            }
+
             return chat;
         }
 
