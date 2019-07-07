@@ -16,11 +16,13 @@ namespace UberHack.API.Model
             this.Foto = usuario.Foto;
             this.Bio = usuario.Bio;
             this.UsuarioId = usuario.Id;
+            this.Empresa = usuario.Empresa?.Nome;
         }
 
         public string Nome { get; set; }
         public string Foto { get; set; }
         public string Bio { get; set; }
+        public string Empresa { get; set; }
         public int UsuarioId { get; set; }
     }
 }

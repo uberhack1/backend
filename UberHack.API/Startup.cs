@@ -74,8 +74,15 @@ namespace UberHack.API
             {
                 route.MapHub<ChatHub>("/chathub");
             });
+            app.UseCors((o) =>
+            {
+                o.AllowCredentials();
+                o.AllowAnyHeader();
+                o.AllowAnyMethod();
+                o.AllowAnyOrigin();
+            });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
