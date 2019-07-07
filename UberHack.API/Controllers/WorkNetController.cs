@@ -96,10 +96,10 @@ namespace UberHack.API.Controllers
 
         private IEnumerable<PossivelConexaoModel> ObterPossiveisConexoes(Usuario usuario)
         {
-            IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
+            IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetQueryable()
                 .Where(o => o.FaculdadeId == usuario.FaculdadeId
                 || o.EmpresaId == usuario.EmpresaId
-                && o.Id != usuario.Id);
+                && o.Id != usuario.Id).Include(u => u.Empresa).ToList();
 
             return possiveisConexoes.Select(o => new PossivelConexaoModel(o));
         }
