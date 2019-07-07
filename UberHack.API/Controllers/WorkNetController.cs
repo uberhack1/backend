@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UberHack.API.Contracts;
 using UberHack.API.Entities;
+using UberHack.API.Model;
 
 namespace UberHack.API.Controllers
 {
@@ -25,27 +26,31 @@ namespace UberHack.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Usuario>> ObterPossiveisConexoes()
+        public UsuarioModel ObterUsuario(int codigoUsuario)
         {
-            Usuario usuarioLogado = ObterUsuarioLogado();
+            Usuario usuario = _usuarioRepository.Get(codigoUsuario);
 
-            IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
-                .Where(o => o.FaculdadeId == usuarioLogado.FaculdadeId || o.EmpresaId == usuarioLogado.EmpresaId);
-
-            return base.Ok(possiveisConexoes);
-
-        }
-
-        [HttpGet]
-        public Usuario ObterUsuario()
-        {
-            Usuario usuario = _usuarioRepository.Get(_codigoUsuarioLogado);
+            var UsuarioModel = new UsuarioModel(usuario);
 
             usuario.Chats = usuario.Chats.OrderByDescending(o => o.Mensagens.OrderByDescending(m => m.DataHora));
             foreach (var chat in usuario.Chats)
                 chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
 
-            return usuario;
+            UsuarioModel.PossiveisConexoes = ObterPossiveisConexoes(codigoUsuario);
+
+            return UsuarioModel;
+        }
+
+        private IEnumerable<PossivelConexaoModel> ObterPossiveisConexoes(int usuarioId)
+        {
+            Usuario usuarioLogado = ObterUsuarioLogado();
+
+            IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
+                .Where(o => o.FaculdadeId == usuarioLogado.FaculdadeId 
+                || o.EmpresaId == usuarioLogado.EmpresaId
+                && o.Id != usuarioId);
+
+            return possiveisConexoes.Select(o => new PossivelConexaoModel(o));
         }
 
         private Usuario ObterUsuarioLogado()
