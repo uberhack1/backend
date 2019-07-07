@@ -18,7 +18,7 @@ namespace UberHack.API.Repository
         {
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=ec2-23-21-160-38.compute-1.amazonaws.com;Database=d53d9j5genek5a;Username=hctvaqyhesrgdr;Password=d35ab130a5d647084cd42b9d2f4317514adc39cb03855e0c00601e95b065d7e8");
+            => optionsBuilder.UseNpgsql("Host=ec2-23-21-160-38.compute-1.amazonaws.com;Database=d53d9j5genek5a;Username=hctvaqyhesrgdr;Password=d35ab130a5d647084cd42b9d2f4317514adc39cb03855e0c00601e95b065d7e8;sslmode=Require;Trust Server Certificate=true;");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
