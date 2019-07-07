@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,16 @@ namespace UberHack.API.Controllers
         [HttpGet]
         public UsuarioModel ObterUsuario(int codigoUsuario)
         {
-            Usuario usuario = _usuarioRepository.Get(codigoUsuario);
+            Usuario usuario = _usuarioRepository.GetQueryable()
+            .Include(o => o.Empresa)
+            .Include(o => o.Faculdade)
+            .Include(o => o.BairroCasa)
+            .Include(o => o.ChatUsuarios)
+            .ThenInclude(a => a.Select(o => o.Usuario))
+            .Include(o => o.ChatUsuarios)
+            .ThenInclude(a => a.Select(o => o.Chat))
+            .Where(o => o.Id == codigoUsuario)
+            .First();
 
             var UsuarioModel = new UsuarioModel(usuario);
 
@@ -63,19 +73,17 @@ namespace UberHack.API.Controllers
             foreach (var chat in UsuarioModel.Chats)
                 chat.Mensagens = chat.Mensagens.OrderBy(o => o.DataHora);
 
-            UsuarioModel.PossiveisConexoes = ObterPossiveisConexoes(codigoUsuario);
+            UsuarioModel.PossiveisConexoes = ObterPossiveisConexoes(usuario);
 
             return UsuarioModel;
         }
 
-        private IEnumerable<PossivelConexaoModel> ObterPossiveisConexoes(int usuarioId)
+        private IEnumerable<PossivelConexaoModel> ObterPossiveisConexoes(Usuario usuario)
         {
-            Usuario usuarioLogado = _usuarioRepository.Get(usuarioId);
-
             IEnumerable<Usuario> possiveisConexoes = _usuarioRepository.GetAll()
-                .Where(o => o.FaculdadeId == usuarioLogado.FaculdadeId
-                || o.EmpresaId == usuarioLogado.EmpresaId
-                && o.Id != usuarioId);
+                .Where(o => o.FaculdadeId == usuario.FaculdadeId
+                || o.EmpresaId == usuario.EmpresaId
+                && o.Id != usuario.Id);
 
             return possiveisConexoes.Select(o => new PossivelConexaoModel(o));
         }
